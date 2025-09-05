@@ -113,4 +113,5 @@ services:
 
 databases:
   - name: pbu-db
-    plan: starter
+    plan: standard
+    region: oregon
