@@ -1,4 +1,4 @@
-# render.yaml (Plant Based University - final)
+# render.yaml (Plant Based University - final 2025)
 
 services:
   - type: web
@@ -113,5 +113,5 @@ services:
 
 databases:
   - name: pbu-db
-    plan: standard
-    region: oregon
+    plan: free        # valid: free, basic, standard, premium
+    region: oregon    # or virginia, frankfurt, singapore
