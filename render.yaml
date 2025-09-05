@@ -106,9 +106,11 @@ services:
       - key: PRINTFUL_CHEST_PATCH_URL
         sync: false
 
-  - type: redis
+   - type: redis
     name: pbu-redis
     plan: starter
+    ipAllowList: []   # allow all services in this Blueprint
+
 
 databases:
   - name: pbu-db
