@@ -1,4 +1,4 @@
-# render.yaml (Plant Based University) — corrected
+# render.yaml (Plant Based University - final)
 
 services:
   - type: web
@@ -12,7 +12,7 @@ services:
     autoDeploy: true
     envVars:
       - key: API_BASE_URL
-        sync: false   # manually set after deploy
+        sync: false   # set manually after deploy
       - key: NEXT_PUBLIC_PRIMARY_COLOR
         value: "#2E8B57"
       - key: NEXT_PUBLIC_SECONDARY_COLOR
@@ -65,10 +65,10 @@ services:
         sync: false
       - key: PRINTFUL_CHEST_PATCH_URL
         sync: false
-      - key: PUBLIC_BASE_URL
-        sync: false   # manually set after deploy
       - key: API_BASE_URL
-        sync: false   # manually set after deploy
+        sync: false
+      - key: PUBLIC_BASE_URL
+        sync: false
 
   - type: worker
     name: pbu-worker
@@ -106,11 +106,10 @@ services:
       - key: PRINTFUL_CHEST_PATCH_URL
         sync: false
 
-   - type: redis
+  - type: redis
     name: pbu-redis
     plan: starter
-    ipAllowList: []   # allow all services in this Blueprint
-
+    ipAllowList: []   # allow all internal services
 
 databases:
   - name: pbu-db
