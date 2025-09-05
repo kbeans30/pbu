@@ -1,9 +1,11 @@
+# render.yaml (Plant Based University)
+
 services:
   - type: web
     name: pbu-web
     env: node
     plan: starter
-    repo: https://github.com/you/pbu
+    repo: https://github.com/kbeans30/pbu
     rootDir: apps/web
     buildCommand: npm ci && npm run build
     startCommand: npm run start
@@ -14,22 +16,22 @@ services:
           name: pbu-api
           type: web
           property: url
-      - key: NEXT_PUBLIC_SUPABASE_URL
-        sync: false
-      - key: NEXT_PUBLIC_SUPABASE_ANON_KEY
-        sync: false
       - key: NEXT_PUBLIC_PRIMARY_COLOR
         value: "#2E8B57"
       - key: NEXT_PUBLIC_SECONDARY_COLOR
         value: "#FFD700"
       - key: NEXT_PUBLIC_CTA_COLOR
         value: "#FF4500"
+      - key: NEXT_PUBLIC_SUPABASE_URL
+        sync: false
+      - key: NEXT_PUBLIC_SUPABASE_ANON_KEY
+        sync: false
 
   - type: web
     name: pbu-api
     env: python
     plan: starter
-    repo: https://github.com/you/pbu
+    repo: https://github.com/kbeans30/pbu
     rootDir: apps/api
     buildCommand: pip install -r requirements.txt
     startCommand: uvicorn main:app --host 0.0.0.0 --port 10000
@@ -62,6 +64,10 @@ services:
         sync: false
       - key: PRINTFUL_STORE_ID
         sync: false
+      - key: PRINTFUL_VARIANT_ID
+        sync: false
+      - key: PRINTFUL_CHEST_PATCH_URL
+        sync: false
       - key: API_BASE_URL
         fromService:
           name: pbu-api
@@ -72,7 +78,7 @@ services:
     name: pbu-worker
     env: python
     plan: starter
-    repo: https://github.com/you/pbu
+    repo: https://github.com/kbeans30/pbu
     rootDir: apps/worker
     buildCommand: pip install -r requirements.txt
     startCommand: rq worker -u $REDIS_URL pbu-jobs
@@ -99,11 +105,15 @@ services:
         sync: false
       - key: PRINTFUL_STORE_ID
         sync: false
+      - key: PRINTFUL_VARIANT_ID
+        sync: false
+      - key: PRINTFUL_CHEST_PATCH_URL
+        sync: false
+
+  - type: redis
+    name: pbu-redis
+    plan: starter
 
 databases:
   - name: pbu-db
-    plan: starter
-
-redis:
-  - name: pbu-redis
     plan: starter
