@@ -1,7 +1,7 @@
-# render.yaml (Plant Based University — stable v2025)
+# render.yaml (Plant Based University - stable)
 
 services:
-  # ---------- FRONTEND ----------
+  # -------- FRONTEND --------
   - type: web
     name: pbu-web
     env: node
@@ -13,33 +13,27 @@ services:
     autoDeploy: true
     envVars:
       - key: API_BASE_URL
-        sync: false                   # set after API is live
+        sync: false   # set manually after deploy, once API is live
       - key: NEXT_PUBLIC_PRIMARY_COLOR
         value: "#2E8B57"
       - key: NEXT_PUBLIC_SECONDARY_COLOR
         value: "#FFD700"
       - key: NEXT_PUBLIC_CTA_COLOR
         value: "#FF4500"
-      - key: NEXT_PUBLIC_SUPABASE_URL
-        sync: false
-      - key: NEXT_PUBLIC_SUPABASE_ANON_KEY
-        sync: false
+      - key: NPM_CONFIG_PRODUCTION
+        value: "false"   # ensures devDependencies (TypeScript, etc.) are installed
       - key: NODE_VERSION
-        value: "20.11.1"
-      - key: NPM_CONFIG_LEGACY_PEER_DEPS
-        value: "true"
-      - key: NEXT_TELEMETRY_DISABLED
-        value: "1"
+        value: "18"
 
-  # ---------- BACKEND API ----------
+  # -------- BACKEND API --------
   - type: web
     name: pbu-api
-    env: python
+    env: node
     plan: starter
     repo: https://github.com/kbeans30/pbu
     rootDir: apps/api
-    buildCommand: pip install -r requirements.txt
-    startCommand: uvicorn main:app --host 0.0.0.0 --port 10000
+    buildCommand: npm install && npm run build
+    startCommand: npm run start
     autoDeploy: true
     envVars:
       - key: DATABASE_URL
@@ -51,78 +45,27 @@ services:
           name: pbu-redis
           type: redis
           property: connectionString
-      - key: S3_BUCKET
-        sync: false
-      - key: S3_REGION
-        sync: false
-      - key: S3_ACCESS_KEY
-        sync: false
-      - key: S3_SECRET_KEY
-        sync: false
-      - key: TWILIO_ACCOUNT_SID
-        sync: false
-      - key: TWILIO_AUTH_TOKEN
-        sync: false
-      - key: TWILIO_FROM
-        sync: false
-      - key: PRINTFUL_API_KEY
-        sync: false
-      - key: PRINTFUL_STORE_ID
-        sync: false
-      - key: PRINTFUL_VARIANT_ID
-        sync: false
-      - key: PRINTFUL_CHEST_PATCH_URL
-        sync: false
-      - key: API_BASE_URL
-        sync: false
-      - key: PUBLIC_BASE_URL
-        sync: false
 
-  # ---------- WORKER ----------
+  # -------- BACKGROUND WORKER --------
   - type: worker
     name: pbu-worker
-    env: python
+    env: node
     plan: starter
     repo: https://github.com/kbeans30/pbu
     rootDir: apps/worker
-    buildCommand: pip install -r requirements.txt
-    startCommand: rq worker -u $REDIS_URL pbu-jobs
+    buildCommand: npm install && npm run build
+    startCommand: npm run start
     autoDeploy: true
     envVars:
       - key: DATABASE_URL
         fromDatabase:
           name: pbu-db
           property: connectionString
-      - key: REDIS_URL
-        fromService:
-          name: pbu-redis
-          type: redis
-          property: connectionString
-      - key: S3_BUCKET
-        sync: false
-      - key: S3_REGION
-        sync: false
-      - key: S3_ACCESS_KEY
-        sync: false
-      - key: S3_SECRET_KEY
-        sync: false
-      - key: PRINTFUL_API_KEY
-        sync: false
-      - key: PRINTFUL_STORE_ID
-        sync: false
-      - key: PRINTFUL_VARIANT_ID
-        sync: false
-      - key: PRINTFUL_CHEST_PATCH_URL
-        sync: false
-
-  # ---------- REDIS ----------
-  - type: redis
-    name: pbu-redis
-    plan: starter
-    ipAllowList: []                   # allow all services in this Blueprint
 
 databases:
-  # ---------- POSTGRES ----------
   - name: pbu-db
-    plan: free                        # free|basic|standard|premium
-    region: oregon                    # oregon|virginia|frankfurt|singapore
+    plan: free
+
+keyValueStores:
+  - name: pbu-redis
+    plan: starter
