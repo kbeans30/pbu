@@ -1,4 +1,4 @@
-# render.yaml (PBU — stable)
+# render.yaml (Plant Based University — stable v2025)
 
 services:
   # ---------- FRONTEND ----------
@@ -13,7 +13,7 @@ services:
     autoDeploy: true
     envVars:
       - key: API_BASE_URL
-        sync: false                     # set after API is live
+        sync: false                   # set after API is live
       - key: NEXT_PUBLIC_PRIMARY_COLOR
         value: "#2E8B57"
       - key: NEXT_PUBLIC_SECONDARY_COLOR
@@ -24,6 +24,12 @@ services:
         sync: false
       - key: NEXT_PUBLIC_SUPABASE_ANON_KEY
         sync: false
+      - key: NODE_VERSION
+        value: "20.11.1"
+      - key: NPM_CONFIG_LEGACY_PEER_DEPS
+        value: "true"
+      - key: NEXT_TELEMETRY_DISABLED
+        value: "1"
 
   # ---------- BACKEND API ----------
   - type: web
@@ -45,7 +51,6 @@ services:
           name: pbu-redis
           type: redis
           property: connectionString
-      # Storage (S3 or compatible)
       - key: S3_BUCKET
         sync: false
       - key: S3_REGION
@@ -54,14 +59,12 @@ services:
         sync: false
       - key: S3_SECRET_KEY
         sync: false
-      # Twilio
       - key: TWILIO_ACCOUNT_SID
         sync: false
       - key: TWILIO_AUTH_TOKEN
         sync: false
       - key: TWILIO_FROM
         sync: false
-      # Printful
       - key: PRINTFUL_API_KEY
         sync: false
       - key: PRINTFUL_STORE_ID
@@ -70,7 +73,6 @@ services:
         sync: false
       - key: PRINTFUL_CHEST_PATCH_URL
         sync: false
-      # URLs (fill after first deploy)
       - key: API_BASE_URL
         sync: false
       - key: PUBLIC_BASE_URL
@@ -117,11 +119,10 @@ services:
   - type: redis
     name: pbu-redis
     plan: starter
-    ipAllowList: []                     # allow all services in this Blueprint
+    ipAllowList: []                   # allow all services in this Blueprint
 
 databases:
   # ---------- POSTGRES ----------
   - name: pbu-db
-    plan: free                          # free|basic|standard|premium
-    region: oregon                      # oregon|virginia|frankfurt|singapore
-
+    plan: free                        # free|basic|standard|premium
+    region: oregon                    # oregon|virginia|frankfurt|singapore
