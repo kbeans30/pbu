@@ -1,4 +1,4 @@
-# render.yaml (Plant Based University)
+# render.yaml (Plant Based University) — corrected
 
 services:
   - type: web
@@ -12,10 +12,7 @@ services:
     autoDeploy: true
     envVars:
       - key: API_BASE_URL
-        fromService:
-          name: pbu-api
-          type: web
-          property: url
+        sync: false   # manually set after deploy
       - key: NEXT_PUBLIC_PRIMARY_COLOR
         value: "#2E8B57"
       - key: NEXT_PUBLIC_SECONDARY_COLOR
@@ -68,11 +65,10 @@ services:
         sync: false
       - key: PRINTFUL_CHEST_PATCH_URL
         sync: false
+      - key: PUBLIC_BASE_URL
+        sync: false   # manually set after deploy
       - key: API_BASE_URL
-        fromService:
-          name: pbu-api
-          type: web
-          property: url
+        sync: false   # manually set after deploy
 
   - type: worker
     name: pbu-worker
