@@ -1,37 +1,30 @@
-# render.yaml (Plant Based University web + API)
-
+# render.yaml (Plant Based University web)
 services:
-  # ---------------- FRONTEND ----------------
+  # ------------- FRONTEND -------------
   - type: web
     name: pbu-web
     env: node
     plan: starter
-    buildCommand: npm install && npm run build
-    startCommand: npm run start
+    buildCommand: cd apps/web && npm install && npm run build
+    startCommand: cd apps/web && npm run start -p $PORT
     autoDeploy: true
-
     envVars:
       - key: NODE_VERSION
         value: 20.11.1
 
-      # 👇 Important: install devDependencies (TypeScript, @types/react, etc.)
+      # install devDependencies (typescript, @types/*, etc.)
       - key: NPM_CONFIG_PRODUCTION
         value: false
-
       - key: NPM_CONFIG_LEGACY_PEER_DEPS
         value: true
 
-      - key: PRINTFUL_API_KEY
-        sync: false
-      - key: PRINTFUL_STORE_ID
-        sync: false
-
+      # public site + API
       - key: PUBLIC_BASE_URL
         value: https://pbu-web.onrender.com
-
       - key: API_BASE_URL
         value: https://pbu-api.onrender.com
 
+      # brand colors (optional)
       - key: NEXT_PUBLIC_PRIMARY_COLOR
         value: "#2E8B57"
       - key: NEXT_PUBLIC_SECONDARY_COLOR
@@ -39,13 +32,17 @@ services:
       - key: NEXT_PUBLIC_CTA_COLOR
         value: "#FF4500"
 
+      # (kept in Render dashboard; do not sync from repo)
       - key: NEXT_PUBLIC_SUPABASE_URL
         sync: false
       - key: NEXT_PUBLIC_SUPABASE_ANON_KEY
         sync: false
       - key: SUPABASE_SERVICE_ROLE_KEY
         sync: false
-
+      - key: PRINTFUL_API_KEY
+        sync: false
+      - key: PRINTFUL_STORE_ID
+        sync: false
       - key: TWILIO_AUTH_TOKEN
         sync: false
       - key: TWILIO_FROM
