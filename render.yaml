@@ -1,6 +1,7 @@
-# render.yaml (Plant Based University web)
+# render.yaml (Plant Based University web + API)
+
 services:
-  # ------------- FRONTEND -------------
+  # ---------------- FRONTEND ----------------
   - type: web
     name: pbu-web
     env: node
@@ -11,39 +12,63 @@ services:
     envVars:
       - key: NODE_VERSION
         value: 20.11.1
-
-      # install devDependencies (typescript, @types/*, etc.)
       - key: NPM_CONFIG_PRODUCTION
         value: false
       - key: NPM_CONFIG_LEGACY_PEER_DEPS
         value: true
 
-      # public site + API
+      # Printful
+      - key: PRINTFUL_API_KEY
+        sync: false
+      - key: PRINTFUL_STORE_ID
+        sync: false
+
+      # URLs
       - key: PUBLIC_BASE_URL
         value: https://pbu-web.onrender.com
       - key: API_BASE_URL
         value: https://pbu-api.onrender.com
 
-      # brand colors (optional)
+      # Theme
       - key: NEXT_PUBLIC_PRIMARY_COLOR
-        value: "#2E8B57"
+        value: "#2E8857"
       - key: NEXT_PUBLIC_SECONDARY_COLOR
         value: "#FFD700"
       - key: NEXT_PUBLIC_CTA_COLOR
         value: "#FF4500"
 
-      # (kept in Render dashboard; do not sync from repo)
+      # Supabase
       - key: NEXT_PUBLIC_SUPABASE_URL
         sync: false
       - key: NEXT_PUBLIC_SUPABASE_ANON_KEY
         sync: false
       - key: SUPABASE_SERVICE_ROLE_KEY
         sync: false
-      - key: PRINTFUL_API_KEY
-        sync: false
-      - key: PRINTFUL_STORE_ID
-        sync: false
+
+      # Twilio
       - key: TWILIO_AUTH_TOKEN
         sync: false
       - key: TWILIO_FROM
+        sync: false
+
+  # ---------------- BACKEND ----------------
+  - type: web
+    name: pbu-api
+    env: node
+    plan: starter
+    buildCommand: cd apps/api && npm install && npm run build
+    startCommand: cd apps/api && npm run start -p $PORT
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: 20.11.1
+      - key: NPM_CONFIG_PRODUCTION
+        value: false
+      - key: NPM_CONFIG_LEGACY_PEER_DEPS
+        value: true
+
+      # Database (replace with your values or sync in dashboard)
+      - key: DATABASE_URL
+        sync: false
+      - key: REDIS_URL
         sync: false
