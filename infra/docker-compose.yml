@@ -1,0 +1,23 @@
+version: '3.9'
+services:
+  api:
+    build: ../apps/api
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/postgres
+      - REDIS_URL=redis://redis:6379/0
+    ports: ["10000:10000"]
+    depends_on: [db, redis]
+  worker:
+    build: ../apps/worker
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/postgres
+      - REDIS_URL=redis://redis:6379/0
+    depends_on: [db, redis]
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_PASSWORD: postgres
+    ports: ["5432:5432"]
+  redis:
+    image: redis:7
+    ports: ["6379:6379"]

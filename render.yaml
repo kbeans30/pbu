@@ -1,0 +1,111 @@
+# render.yaml (Plant Based University – full example)
+
+services:
+  # ---------------- FRONTEND (Next.js) ----------------
+  - type: web
+    name: pbu-web
+    env: node
+    plan: starter
+    repo: https://github.com/kbeans30/pbu
+    rootDir: apps/web
+    buildCommand: npm install && npm run build
+    startCommand: npm run start
+    autoDeploy: true
+    envVars:
+      - key: PUBLIC_BASE_URL
+        value: https://pbu-web.onrender.com
+      - key: API_BASE_URL
+        value: https://pbu-api.onrender.com
+      - key: NEXT_PUBLIC_PRIMARY_COLOR
+        value: "#2E8B57"
+      - key: NEXT_PUBLIC_SECONDARY_COLOR
+        value: "#FFD700"
+      - key: NEXT_PUBLIC_CTA_COLOR
+        value: "#FF4500"
+      - key: NEXT_PUBLIC_SUPABASE_URL
+        value: https://dummy-supabase-url.supabase.co
+      - key: NEXT_PUBLIC_SUPABASE_ANON_KEY
+        value: dummy-anon-key
+      - key: NODE_VERSION
+        value: 18.20.4
+      - key: NPM_CONFIG_LEGACY_PEER_DEPS
+        value: "true"
+      - key: NEXT_TELEMETRY_DISABLED
+        value: "1"
+
+  # ---------------- BACKEND API ----------------
+  - type: web
+    name: pbu-api
+    env: node
+    plan: starter
+    repo: https://github.com/kbeans30/pbu
+    rootDir: apps/api
+    buildCommand: npm install && npm run build
+    startCommand: npm run start
+    autoDeploy: true
+    envVars:
+      - key: PUBLIC_BASE_URL
+        value: https://pbu-web.onrender.com
+      - key: API_BASE_URL
+        value: https://pbu-api.onrender.com
+      - key: NEXT_PUBLIC_SUPABASE_URL
+        value: https://dummy-supabase-url.supabase.co
+      - key: NEXT_PUBLIC_SUPABASE_ANON_KEY
+        value: dummy-anon-key
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        value: dummy-service-role-key
+      - key: TWILIO_ACCOUNT_SID
+        value: false
+      - key: TWILIO_AUTH_TOKEN
+        value: false
+      - key: TWILIO_FROM
+        value: false
+      - key: PRINTFUL_API_KEY
+        value: false
+      - key: PRINTFUL_STORE_ID
+        value: "false"
+      - key: S3_BUCKET
+        value: dummy-bucket
+      - key: S3_REGION
+        value: us-east-1
+      - key: S3_ACCESS_KEY
+        value: dummy-access-key
+      - key: S3_SECRET_KEY
+        value: dummy-secret-key
+      - key: REDIS_URL
+        value: dummy-redis-url
+      - key: NODE_VERSION
+        value: 18.20.4
+      - key: NPM_CONFIG_LEGACY_PEER_DEPS
+        value: "true"
+
+  # ---------------- BACKGROUND WORKER ----------------
+  - type: worker
+    name: pbu-worker
+    env: node
+    plan: starter
+    repo: https://github.com/kbeans30/pbu
+    rootDir: apps/worker
+    buildCommand: npm install && npm run build
+    startCommand: npm run start
+    autoDeploy: true
+    envVars:
+      - key: API_BASE_URL
+        value: https://pbu-api.onrender.com
+      - key: NODE_VERSION
+        value: 18.20.4
+      - key: NPM_CONFIG_LEGACY_PEER_DEPS
+        value: "true"
+
+  # ---------------- DATABASE (Postgres free plan) ----------------
+  - type: pserv
+    name: pbu-db
+    env: postgres
+    plan: free
+    version: 15
+
+  # ---------------- REDIS CACHE ----------------
+  - type: redis
+    name: pbu-redis
+    plan: starter
+    ipAllowList: []  # open access, lock down later
