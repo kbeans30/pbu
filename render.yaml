@@ -6,9 +6,10 @@ services:
     name: pbu-web
     env: node
     plan: starter
-    buildCommand: cd apps/web && npm install && SKIP_ENV_VALIDATION=1 NEXT_DISABLE_ESLINT=1 NEXT_DISABLE_TYPECHECK=1 npm run build
+    buildCommand: cd apps/web && npm install && NEXT_DISABLE_ESLINT=1 NEXT_DISABLE_TYPECHECK=1 SKIP_ENV_VALIDATION=1 npm run build
     startCommand: cd apps/web && npm run start
     autoDeploy: true
+
     envVars:
       - key: NODE_VERSION
         value: 20.11.1
