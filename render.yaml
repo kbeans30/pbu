@@ -1,38 +1,40 @@
-# render.yaml (Plant Based University web + API)
+# render.yaml (Plant Based University — web)
 
 services:
-  # ---------------- FRONTEND ----------------
+  # --------------- FRONTEND (Next.js) ---------------
   - type: web
     name: pbu-web
     env: node
     plan: starter
-    buildCommand: cd apps/web && npm install && npm run build
-    startCommand: cd apps/web && npm run start
     autoDeploy: true
 
+    # Build/run inside apps/web so the right package.json is used
+    buildCommand: |
+      cd apps/web
+      npm install
+      npm run build
+    startCommand: |
+      cd apps/web
+      npm run start
+
     envVars:
+      # ---- Build/runtime settings ----
       - key: NODE_VERSION
         value: 20.11.1
-
-      # 👇 Force devDependencies (like TypeScript + @types/react) to install
-      - key: NODE_ENV
-        value: development
+      # Ensure dev-like deps (TypeScript + @types) are installed on Render
       - key: NPM_CONFIG_PRODUCTION
         value: false
+      # Helps avoid peer-deps conflicts in hosted builds
       - key: NPM_CONFIG_LEGACY_PEER_DEPS
         value: true
 
-      - key: PRINTFUL_API_KEY
-        sync: false
-      - key: PRINTFUL_STORE_ID
-        sync: false
-
+      # ---- Public URLs (non-secret) ----
       - key: PUBLIC_BASE_URL
         value: https://pbu-web.onrender.com
-
       - key: API_BASE_URL
         value: https://pbu-api.onrender.com
 
+      # ---- Theme (safe to commit) ----
       - key: NEXT_PUBLIC_PRIMARY_COLOR
         value: "#2E8B57"
       - key: NEXT_PUBLIC_SECONDARY_COLOR
@@ -40,6 +42,7 @@ services:
       - key: NEXT_PUBLIC_CTA_COLOR
         value: "#FF4500"
 
+      # ---- Supabase (set values in Render dashboard) ----
       - key: NEXT_PUBLIC_SUPABASE_URL
         sync: false
       - key: NEXT_PUBLIC_SUPABASE_ANON_KEY
@@ -47,7 +50,17 @@ services:
       - key: SUPABASE_SERVICE_ROLE_KEY
         sync: false
 
+      # ---- Twilio (set values in dashboard) ----
+      - key: TWILIO_ACCOUNT_SID
+        sync: false
       - key: TWILIO_AUTH_TOKEN
         sync: false
       - key: TWILIO_FROM
         sync: false
+
+      # ---- Printful (set values in dashboard) ----
+      - key: PRINTFUL_API_KEY
+        sync: false
+      - key: PRINTFUL_STORE_ID
+        sync: false
+
